@@ -38,6 +38,7 @@ setInterval(saveToFile, 15 * 60 * 1000) // Autosave every 15 mins
 
 
 const server = http.createServer((req, res)=>{
+  console.log(req.method, req.url);
   if (req.method === "POST" && req.url === "/increment_user") {
     data.user_number++;
     data.logs.unshift((new Date).toString())
