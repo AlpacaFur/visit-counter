@@ -5,6 +5,35 @@
     <title></title>
   </head>
   <body>
-    <p>Gamer time</p>
+    <style>body{font-family: sans-serif;}#byip{color: #333;}#raw{font-size: 10px; color: #444}</style>
+    <h1>Unique: <span id="unique"></span></h1>
+    <p>Total: <span id="total"></span></p>
+    <pre id="byip"></pre>
+    <pre id="raw"></pre>
+    <script>
+      let deduped = {};
+      let list = []
+      fetch("data")
+        .then(res=>res.json())
+        .then((res)=>{
+          list = res.logs;
+          let uniqueUsers = 0;
+          list.forEach((entry)=>{
+            let pieces = entry.split(" ")
+            let ip = pieces[0];
+            let time = pieces.slice(2,7).join(" ") + " (EST)";
+            if (deduped[ip]) deduped[ip].push(time);
+            else {
+              deduped[ip] = [time];
+              uniqueUsers++;
+            }
+          })
+          total.textContent = list.length;
+          unique.textContent = uniqueUsers;
+          byip.textContent = JSON.stringify(deduped, null, 2);
+          raw.textContent = JSON.stringify(list, null, 2);
+
+        })
+    </script>
   </body>
 </html>

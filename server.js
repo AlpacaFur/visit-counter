@@ -4,7 +4,7 @@ const path = require('path');
 
 const dataPath = path.join(__dirname, "data.json")
 const viewPath = path.join(__dirname, 'view.html');
-const viewSize = fs.statSync(viewPath).size;
+const viewFile = fs.readFileSync(viewPath)
 
 var saved = false;
 
@@ -46,13 +46,10 @@ const server = http.createServer((req, res)=>{
   }
   else if (req.method === "GET" && req.url === "/view") {
 
-    res.writeHead(200, {
-      'Content-Type': 'text/html',
-      'Content-Length': viewSize
-    });
+    res.writeHead(200, {'Content-Type': 'text/html'});
 
-    const readStream = fs.createReadStream(viewPath);
-    readStream.pipe(res);
+    res.write(viewFile)
+    res.end()
   }
   if (req.method === "GET" && req.url === "/data") {
 
